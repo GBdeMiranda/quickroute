@@ -1,19 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Options</title>
-  <style>
-    body { padding: 20px; font-family: Arial, sans-serif; }
-    .template { border: 1px solid #ddd; padding: 15px; margin: 10px 0; }
-    input { display: block; width: 100%; margin: 5px 0; padding: 8px; }
-    button { padding: 8px 15px; margin: 5px; cursor: pointer; }
-  </style>
+    <title>Options</title>
+    <style>
+        body { 
+            padding: 40px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fafafa;
+            color: #1a1a1a;
+        }
+        h1 {
+            font-weight: 600;
+            color: #2d2d2d;
+            margin-bottom: 30px;
+        }
+        .template { 
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+        .template:hover {
+            transform: translateY(-2px);
+        }
+        input { 
+            display: block;
+            width: 100%;
+            margin: 8px 0;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+        input:focus {
+            outline: none;
+            border-color: #666;
+        }
+        button {
+            padding: 12px 20px;
+            margin: 8px;
+            border: none;
+            border-radius: 6px;
+            background: #2d2d2d;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        button:hover {
+            background: #404040;
+        }
+    </style>
 </head>
 <body>
-  <h1>Template Configuration</h1>
-  <div id="templatesContainer"></div>
-  <button id="addTemplate">Add New Template</button>
-  <button id="saveTemplates">Save All Templates</button>
-  <script src="options.js"></script>
+    <h1>Template Configuration</h1>
+    <div id="templatesContainer"></div>
+    <button id="addTemplate">Add New Template</button>
+    <button id="saveTemplates">Save All Templates</button>
+    <script src="options.js"></script>
 </body>
 </html>
