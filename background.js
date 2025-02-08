@@ -25,14 +25,23 @@ async function loadTemplates() {
   });
 }
 
-function updateContextMenu() {
+let createdMenuIds = [];
+
+async function updateContextMenu() {
+  // Clear existing menu items
+  await Promise.all(createdMenuIds.map(id => chrome.contextMenus.remove(id)));
+  createdMenuIds = [];
+
+  // Create new menu items
   templates.forEach((template, index) => {
+    const menuId = `template_${index}`;
     chrome.contextMenus.create({
-      id: `template_${index}`,
+      id: menuId,
       title: template.name,
       parentId: "main_menu",
       contexts: ["all"]
     });
+    createdMenuIds.push(menuId);
   });
 }
 

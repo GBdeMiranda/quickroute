@@ -1,12 +1,16 @@
-# QuickRoute (v0)
+# QuickRoute (v0.1)
 
-A Chrome extension that lets you define a URL template and open selected text/links in that template.
+A Chrome extension that lets you define multiple URL templates and quickly open selected text/links using keyboard shortcuts or context menu.
 
 ## Features
 - Set custom URL templates with `{url}` placeholder
 - Right-click context menu integration
 - Simple options page for configuration
 - URL-encoding for special characters
+- Multiple template support
+- Keyboard shortcuts (Ctrl+Shift+1-4)
+- Template management interface
+- Template preview in popup
 
 ## Installation
 1. Clone/download this repository
@@ -18,23 +22,30 @@ A Chrome extension that lets you define a URL template and open selected text/li
    - Select the project folder
 
 ## Usage
-1. **Set Template:**
-   - Click the extension icon > "Options"
-   - Enter template (e.g., `https://proxy.example/?url={url}`)
-   - Click "Save Template"
+1. **Configure Templates:**
+   - Click extension icon > "Options"
+   - Add multiple templates with custom names
+   - Each template must include `{url}` placeholder
+   - Click "Save All Templates"
 
-2. **Use Template:**
-   - **For text selection:**
-     1. Highlight text on any page
-     2. Right-click > "Open in Template"
-   - **For links:**
-     1. Right-click any link
-     2. Choose "Open in Template"
+2. **Use Templates:**
+   - **Via Context Menu:**
+     1. Right-click on any text/link
+     2. Select "Open with Template" > Choose template
+   - **Via Keyboard:**
+     - Use Ctrl+Shift+1 for first template
+     - Use Ctrl+Shift+2 for second template
+     - etc. (up to 4 templates)
+   - **Via Popup:**
+     1. Click extension icon
+     2. Select desired template
 
-## Example
-**Template:** `https://translate.google.com/?sl=auto&tl=en&text={url}`  
-**Selected Text:** `Bonjour le monde`  
-**Result:** `https://translate.google.com/...?text=Bonjour%20le%20monde`
+## Examples
+**Template Examples:**
+- Google Translate: `https://translate.google.com/?sl=auto&tl=en&text={url}`
+- Archive.org: `https://web.archive.org/web/{url}`
+- Wayback Machine: `https://web.archive.org/save/{url}`
+- Custom Proxy: `https://your-proxy.com/fetch?url={url}`
 
 ## Structure
 ```plaintext
@@ -53,14 +64,30 @@ quickroute-extension/
 ```
 
 ## Development
-**Dependencies:**  
+**Requirements:**
 - Chrome browser (v88+ for Manifest V3)
+- Basic knowledge of HTML/CSS/JavaScript
 
-**Testing Checklist:**  
-- [ ] Template saving/loading works
-- [ ] Context menu appears for text/links
-- [ ] URL encoding works properly
-- [ ] Error handling for missing template
-- [ ] Cross-origin URL testing
+**Local Development:**
+1. Clone repository
+2. Make changes to source files
+3. Load unpacked extension in Chrome
+4. Test changes
+5. Reload extension as needed
+
+**Testing:**
+- Verify all keyboard shortcuts
+- Test with various URL formats
+- Check template saving/loading
+- Verify context menu operation
+- Test URL encoding/decoding
+
+## Contributing
+1. Fork the repository
+2. Create feature branch
+3. Commit changes
+4. Push to branch
+5. Create Pull Request
 
 ## License
+MIT License

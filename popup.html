@@ -2,18 +2,20 @@
 <html>
 <head>
   <style>
-    body { width: 350px; padding: 10px; font-family: Arial, sans-serif; }
-    .template-item { 
-      padding: 10px; 
-      border-bottom: 1px solid #eee;
+    /* Keep existing styles */
+    #configureButton {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      background: #eb8b8b;
+      border: none;
       cursor: pointer;
     }
-    .template-item:hover { background: #f5f5f5; }
-    .shortcut { color: #666; font-size: 0.9em; }
   </style>
 </head>
 <body>
   <div id="templateList"></div>
+  <button id="configureButton">Configure Templates</button>
   <script src="popup.js"></script>
 </body>
 </html>

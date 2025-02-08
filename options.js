@@ -53,7 +53,7 @@ function initOptions() {
 
   function addNewTemplate() {
     templates.push({
-      name: `Template ${templates.length + 1}`,
+      name: `Example Template ${templates.length + 1}`,
       url: 'https://example.com/?url={url}'
     });
     renderTemplates();
