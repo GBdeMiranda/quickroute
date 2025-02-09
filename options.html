@@ -5,7 +5,7 @@
     <style>
         body { 
             padding: 40px;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
             max-width: 800px;
             margin: 0 auto;
             background: #fafafa;
@@ -13,11 +13,16 @@
         }
         h1 {
             font-weight: 600;
-            color: #2d2d2d;
             margin-bottom: 30px;
+            background: linear-gradient(to right, #6A0DAD, #D1007B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .template { 
             background: white;
+            border-left: 4px solid;
+            border-image-slice: 1;
+            border-image-source: linear-gradient(to bottom, #6A0DAD, #D1007B);
             border-radius: 12px;
             padding: 20px;
             margin: 15px 0;
@@ -46,14 +51,14 @@
             margin: 8px;
             border: none;
             border-radius: 6px;
-            background: #2d2d2d;
+            background: linear-gradient(to bottom, #6A0DAD, #D1007B);
             color: white;
             font-weight: 500;
             cursor: pointer;
             transition: background 0.2s ease;
         }
         button:hover {
-            background: #404040;
+            background: linear-gradient(to bottom, #D1007B, #6A0DAD);
         }
     </style>
 </head>

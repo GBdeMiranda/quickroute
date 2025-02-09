@@ -1,4 +1,10 @@
-# QuickRoute (v0.1)
+<div align="center">
+  <img src="icons/icon128.png" alt="QuickRoute Logo" width="128" height="128">
+  <h1>QuickRoute (v0.1)</h1>
+  <p>Chrome extension for URL template shortcuts</p>
+
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+</div>
 
 A Chrome extension that lets you define multiple URL templates and quickly open selected text/links using keyboard shortcuts or context menu.
 
@@ -6,7 +12,6 @@ A Chrome extension that lets you define multiple URL templates and quickly open 
 - Set custom URL templates with `{url}` placeholder
 - Right-click context menu integration
 - Simple options page for configuration
-- URL-encoding for special characters
 - Multiple template support
 - Keyboard shortcuts (Ctrl+Shift+1-4)
 - Template management interface
@@ -14,8 +19,7 @@ A Chrome extension that lets you define multiple URL templates and quickly open 
 
 ## Installation
 1. Clone/download this repository
-2. Create icon files (16x16, 48x48, 128x128 PNG) in `/icons`
-3. In Chrome:
+2. In Chrome:
    - Go to `chrome://extensions`
    - Enable "Developer mode" (toggle top-right)
    - Click "Load unpacked"
@@ -23,8 +27,8 @@ A Chrome extension that lets you define multiple URL templates and quickly open 
 
 ## Usage
 1. **Configure Templates:**
-   - Click extension icon > "Options"
-   - Add multiple templates with custom names
+   - Click extension icon > "Configure Templates"
+   - Add templates with custom names
    - Each template must include `{url}` placeholder
    - Click "Save All Templates"
 
@@ -40,16 +44,17 @@ A Chrome extension that lets you define multiple URL templates and quickly open 
      1. Click extension icon
      2. Select desired template
 
-## Examples
-**Template Examples:**
-- Google Translate: `https://translate.google.com/?sl=auto&tl=en&text={url}`
-- Archive.org: `https://web.archive.org/web/{url}`
-- Wayback Machine: `https://web.archive.org/save/{url}`
-- Custom Proxy: `https://your-proxy.com/fetch?url={url}`
+## Template Examples
+| Purpose | Template |
+|---------|----------|
+| Google Translate | `https://translate.google.com/?sl=auto&tl=en&text={url}` |
+| Archive.org | `https://web.archive.org/web/{url}` |
+| Wayback Machine | `https://web.archive.org/save/{url}` |
+| Custom Proxy | `https://your-proxy.com/fetch?url={url}` |
 
-## Structure
+## Project Structure
 ```plaintext
-quickroute-extension/
+quickroute/
 ├── manifest.json
 ├── background.js
 ├── options.html
@@ -66,7 +71,8 @@ quickroute-extension/
 ## Development
 **Requirements:**
 - Chrome browser (v88+ for Manifest V3)
-- Basic knowledge of HTML/CSS/JavaScript
+- Text editor/IDE (VS Code, Sublime, etc.)
+- Basic JavaScript/HTML/CSS knowledge
 
 **Local Development:**
 1. Clone repository
@@ -74,13 +80,6 @@ quickroute-extension/
 3. Load unpacked extension in Chrome
 4. Test changes
 5. Reload extension as needed
-
-**Testing:**
-- Verify all keyboard shortcuts
-- Test with various URL formats
-- Check template saving/loading
-- Verify context menu operation
-- Test URL encoding/decoding
 
 ## Contributing
 1. Fork the repository
@@ -90,4 +89,4 @@ quickroute-extension/
 5. Create Pull Request
 
 ## License
-MIT License
+This project is open source and available under the [MIT License](LICENSE).

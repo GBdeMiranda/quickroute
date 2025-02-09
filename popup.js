@@ -53,17 +53,22 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.runtime.openOptionsPage();
     });
   
+    // Template item click handler
     templateList.addEventListener('click', e => {
-    const item = e.target.closest('.template-item');
-    if (!item) return;
-    
-    const index = parseInt(item.dataset.index);
-    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-        chrome.runtime.sendMessage({
-        action: 'useTemplate',
-        index: index,
-        url: tabs[0].url
+        const item = e.target.closest('.template-item');
+        if (!item) return;
+        
+        const index = parseInt(item.dataset.index);
+        chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+            const currentUrl = tabs[0].url;
+            chrome.storage.sync.get(['templates'], result => {
+                const templates = result.templates || [];
+                if (templates[index]) {
+                    const encodedUrl = encodeURIComponent(currentUrl);
+                    const newUrl = templates[index].url.replace(/{url}/g, encodedUrl);
+                    chrome.tabs.create({ url: newUrl });
+                }
+            });
         });
-    });
     });
 });
