@@ -46,8 +46,23 @@ async function updateContextMenu() {
 }
 
 function handleContextMenuClick(info, tab) {
-  const index = parseInt(info.menuItemId.split('_')[1]);
-  processTemplate(index, tab.url);
+    const templateIndex = parseInt(info.menuItemId.split('_')[1]);
+    if (isNaN(templateIndex)) return;
+
+    // Get the URL to process (either selected text, link URL, or current page URL)
+    let targetUrl = info.selectionText || info.linkUrl || tab.url;
+    
+    // If it's selected text and doesn't look like a URL, try to convert it
+    if (info.selectionText && !targetUrl.startsWith('http')) {
+        try {
+            targetUrl = new URL(targetUrl).href;
+        } catch {
+            // If it's not a valid URL, use it as-is
+            targetUrl = info.selectionText;
+        }
+    }
+
+    processTemplate(templateIndex, targetUrl);
 }
 
 function handleKeyboardShortcut(command) {
@@ -64,10 +79,10 @@ function handleRuntimeMessages(request) {
 }
 
 function processTemplate(index, inputUrl) {
-  if (!templates[index]?.url) return;
-  
-  const encodedUrl = encodeURIComponent(inputUrl);
-  const newUrl = templates[index].url.replace(/{url}/g, encodedUrl);
-  
-  chrome.tabs.create({ url: newUrl });
+    if (!templates[index] || !templates[index].url) return;
+    
+    const encodedUrl = encodeURIComponent(inputUrl);
+    const newUrl = templates[index].url.replace(/{url}/g, encodedUrl);
+    
+    chrome.tabs.create({ url: newUrl });
 }

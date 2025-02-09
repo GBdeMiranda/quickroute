@@ -1,7 +1,8 @@
 {
-    "manifest_version": 3,
-    "name": "Template Extension",
+    "name": "QuickRoute",
+    "description": "Chrome extension for URL template shortcuts",
     "version": "1.0",
+    "manifest_version": 3,
     "action": {
       "default_popup": "popup.html",
       "default_icon": "icons/icon48.png"
