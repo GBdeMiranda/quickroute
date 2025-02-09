@@ -17,7 +17,7 @@ A Chrome extension that lets you define multiple URL templates and quickly open 
 - Template management interface
 - Template preview in popup
 
-## Installation
+## Local Installation
 1. Clone/download this repository
 2. In Chrome:
    - Go to `chrome://extensions`
