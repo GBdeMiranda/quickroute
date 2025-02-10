@@ -19,7 +19,14 @@ async function initializeContextMenu() {
 async function loadTemplates() {
   return new Promise(resolve => {
     chrome.storage.sync.get(['templates'], result => {
-      templates = result.templates || [];
+      if (!result.templates) {
+        templates = [{
+          name: "Configure Templates",
+          url: chrome.runtime.getURL("options.html")
+        }];
+      } else {
+        templates = result.templates;
+      }
       resolve();
     });
   });
