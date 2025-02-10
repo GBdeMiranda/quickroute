@@ -5,15 +5,25 @@ function initOptions() {
   const addBtn = document.getElementById('addTemplate');
   const saveBtn = document.getElementById('saveTemplates');
   let templates = [];
+  let hasUnsavedChanges = false;
 
   loadTemplates();
 
   addBtn.addEventListener('click', addNewTemplate);
   saveBtn.addEventListener('click', saveAllTemplates);
 
+  window.addEventListener('beforeunload', (e) => {
+    if (hasUnsavedChanges) {
+      e.preventDefault();
+      e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+      return e.returnValue;
+    }
+  });
+
   function loadTemplates() {
     chrome.storage.sync.get(['templates'], result => {
       templates = result.templates || [];
+      hasUnsavedChanges = false;
       renderTemplates();
     });
   }
@@ -27,6 +37,13 @@ function initOptions() {
       const nameInput = createInput('text', template.name, 'Template Name');
       const urlInput = createInput('text', template.url, 'URL Pattern');
       const removeBtn = createRemoveButton(index);
+      
+      if (index < 4) {
+        const shortcutSpan = document.createElement('span');
+        shortcutSpan.className = 'shortcut-badge';
+        shortcutSpan.textContent = `Ctrl+Shift+${index + 1}`;
+        div.appendChild(shortcutSpan);
+      }
       
       nameInput.addEventListener('input', e => updateTemplate(index, 'name', e.target.value));
       urlInput.addEventListener('input', e => updateTemplate(index, 'url', e.target.value));
@@ -56,16 +73,19 @@ function initOptions() {
       name: `Example Template ${templates.length + 1}`,
       url: 'https://example.com/?url={url}'
     });
+    hasUnsavedChanges = true;
     renderTemplates();
   }
 
   function removeTemplate(index) {
     templates.splice(index, 1);
+    hasUnsavedChanges = true;
     renderTemplates();
   }
 
   function updateTemplate(index, field, value) {
     templates[index][field] = value;
+    hasUnsavedChanges = true;
   }
 
   function saveAllTemplates() {
@@ -74,6 +94,7 @@ function initOptions() {
     
     chrome.storage.sync.set({ templates }, () => {
       chrome.runtime.sendMessage({ action: 'updateTemplates' });
+      hasUnsavedChanges = false;
       alert('Templates saved successfully!');
     });
   }

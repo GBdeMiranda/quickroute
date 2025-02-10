@@ -35,11 +35,9 @@ async function loadTemplates() {
 let createdMenuIds = [];
 
 async function updateContextMenu() {
-  // Clear existing menu items
   await Promise.all(createdMenuIds.map(id => chrome.contextMenus.remove(id)));
   createdMenuIds = [];
 
-  // Create new menu items
   templates.forEach((template, index) => {
     const menuId = `template_${index}`;
     chrome.contextMenus.create({
@@ -56,7 +54,6 @@ function handleContextMenuClick(info, tab) {
     const templateIndex = parseInt(info.menuItemId.split('_')[1]);
     if (isNaN(templateIndex)) return;
 
-    // Get the URL to process (either selected text, link URL, or current page URL)
     let targetUrl = info.selectionText || info.linkUrl || tab.url;
     
     // If it's selected text and doesn't look like a URL, try to convert it

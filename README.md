@@ -47,10 +47,13 @@ A Chrome extension that lets you define multiple URL templates and quickly open 
 ## Template Examples
 | Purpose | Template |
 |---------|----------|
-| Google Translate | `https://translate.google.com/?sl=auto&tl=en&text={url}` |
 | Archive.org | `https://web.archive.org/web/{url}` |
 | Wayback Machine | `https://web.archive.org/save/{url}` |
+| Freedium | `https://freedium.cfd/{url}` |
+| 12ft.io | `https://12ft.io/{url}` |
 | Custom Proxy | `https://your-proxy.com/fetch?url={url}` |
+
+
 
 ## Project Structure
 ```plaintext

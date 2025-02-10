@@ -18,7 +18,18 @@ document.addEventListener('DOMContentLoaded', () => {
             max-width: 600px;
             width: 90vw;
             box-sizing: border-box;
+            position: relative;
         ">
+            ${index < 4 ? `<span style="
+                position: absolute;
+                right: 8px;
+                top: 8px;
+                background: #6A0DAD;
+                color: white;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-size: 11px;
+            ">Ctrl+Shift+${index + 1}</span>` : ''}
             <strong style="
                 display: block;
                 margin-bottom: 6px;
@@ -30,11 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 font-size: 12px;
                 word-break: break-all;
                 overflow-wrap: break-word;
+                padding-right: ${index < 4 ? '70px' : '0'};
             ">${template.url.replace('{url}', '[URL]')}</div>
         </div>
         `).join('');
 
-        // Add hover effect
         const items = document.querySelectorAll('.template-item');
         items.forEach(item => {
             item.addEventListener('mouseover', () => {
@@ -48,12 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Configuration button handler
     configureButton.addEventListener('click', () => {
         chrome.runtime.openOptionsPage();
     });
   
-    // Template item click handler
     templateList.addEventListener('click', e => {
         const item = e.target.closest('.template-item');
         if (!item) return;
