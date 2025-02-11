@@ -58,16 +58,20 @@ A Chrome extension that lets you define multiple URL templates and quickly open 
 ## Project Structure
 ```plaintext
 quickroute/
-├── manifest.json
-├── background.js
-├── options.html
-├── options.js
-├── popup.html
-├── popup.js
+├── src/
+│   ├── js/
+│   │   ├── background.js
+│   │   ├── popup.js
+│   │   └── options.js
+│   ├── styles/
+│   │   ├── popup.css
+│   │   └── options.css
+│   └── html/
+│       ├── popup.html
+│       └── options.html
 ├── icons/
-│   ├── icon16.png
-│   ├── icon48.png
-│   └── icon128.png
+├── manifest.json
+├── LICENSE
 └── README.md
 ```
 

@@ -17,19 +17,31 @@
     },
     "commands": {
       "open_template_1": {
-        "suggested_key": { "default": "Ctrl+Shift+1" },
+        "suggested_key": {
+          "default": "Ctrl+Shift+1",
+          "mac": "Command+Shift+1"
+        },
         "description": "Use Template 1"
       },
       "open_template_2": {
-        "suggested_key": { "default": "Ctrl+Shift+2" },
+        "suggested_key": {
+          "default": "Ctrl+Shift+2",
+          "mac": "Command+Shift+2"
+        },
         "description": "Use Template 2"
       },
       "open_template_3": {
-        "suggested_key": { "default": "Ctrl+Shift+3" },
+        "suggested_key": {
+          "default": "Ctrl+Shift+3",
+          "mac": "Command+Shift+3"
+        },
         "description": "Use Template 3"
       },
       "open_template_4": {
-        "suggested_key": { "default": "Ctrl+Shift+4" },
+        "suggested_key": {
+          "default": "Ctrl+Shift+4",
+          "mac": "Command+Shift+4"
+        },
         "description": "Use Template 4"
       }
     },

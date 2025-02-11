@@ -50,43 +50,68 @@ async function updateContextMenu() {
   });
 }
 
-function handleContextMenuClick(info, tab) {
-    const templateIndex = parseInt(info.menuItemId.split('_')[1]);
-    if (isNaN(templateIndex)) return;
-
-    let targetUrl = info.selectionText || info.linkUrl || tab.url;
-    
-    // If it's selected text and doesn't look like a URL, try to convert it
-    if (info.selectionText && !targetUrl.startsWith('http')) {
-        try {
-            targetUrl = new URL(targetUrl).href;
-        } catch {
-            // If it's not a valid URL, use it as-is
-            targetUrl = info.selectionText;
+async function handleContextMenuClick(info, tab) {
+    try {
+        await loadTemplates(); // Ensure fresh templates
+        const templateIndex = parseInt(info.menuItemId.split('_')[1]);
+        if (isNaN(templateIndex)) {
+            console.error('Invalid template index');
+            return;
         }
+
+        let targetUrl = info.selectionText || info.linkUrl || tab.url;
+        
+        if (info.selectionText && !targetUrl.startsWith('http')) {
+            try {
+                targetUrl = new URL(targetUrl).href;
+            } catch (error) {
+                console.log('Converting selection to URL failed, using raw text');
+                targetUrl = info.selectionText;
+            }
+        }
+
+        await processTemplate(templateIndex, targetUrl);
+    } catch (error) {
+        console.error('Context menu click error:', error);
     }
-
-    processTemplate(templateIndex, targetUrl);
 }
 
-function handleKeyboardShortcut(command) {
-  const index = parseInt(command.split('_').pop()) - 1;
-  chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-    processTemplate(index, tabs[0].url);
-  });
+async function handleKeyboardShortcut(command) {
+    try {
+        await loadTemplates(); // Ensure fresh templates
+        const index = parseInt(command.split('_').pop()) - 1;
+        const tabs = await chrome.tabs.query({active: true, currentWindow: true});
+        if (tabs[0]) {
+            await processTemplate(index, tabs[0].url);
+        }
+    } catch (error) {
+        console.error('Keyboard shortcut error:', error);
+    }
 }
 
-function handleRuntimeMessages(request) {
-  if (request.action === 'updateTemplates') {
-    loadTemplates().then(updateContextMenu);
-  }
+async function handleRuntimeMessages(request, sender, sendResponse) {
+    try {
+        if (request.action === 'updateTemplates') {
+            await loadTemplates();
+            await updateContextMenu();
+        }
+    } catch (error) {
+        console.error('Runtime message error:', error);
+    }
 }
 
-function processTemplate(index, inputUrl) {
-    if (!templates[index] || !templates[index].url) return;
-    
-    const encodedUrl = encodeURIComponent(inputUrl);
-    const newUrl = templates[index].url.replace(/{url}/g, encodedUrl);
-    
-    chrome.tabs.create({ url: newUrl });
+async function processTemplate(index, inputUrl) {
+    try {
+        if (!templates[index] || !templates[index].url) {
+            console.error('Template not found or invalid');
+            return;
+        }
+        
+        const encodedUrl = encodeURIComponent(inputUrl);
+        const newUrl = templates[index].url.replace(/{url}/g, encodedUrl);
+        
+        await chrome.tabs.create({ url: newUrl });
+    } catch (error) {
+        console.error('Process template error:', error);
+    }
 }
