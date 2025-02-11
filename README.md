@@ -6,7 +6,7 @@
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 </div>
 
-A Chrome extension that lets you define multiple URL templates and quickly open selected text/links using keyboard shortcuts or context menu.
+A Chrome extension that lets you define multiple URL templates and quickly open selected text/links using keyboard shortcuts or a context menu.
 
 ## Features
 - Set custom URL templates with `{url}` placeholder
@@ -24,7 +24,6 @@ A Chrome extension that lets you define multiple URL templates and quickly open 
    - Enable "Developer mode" (toggle top-right)
    - Click "Load unpacked"
    - Select the project folder
-3. [Privacy Policy](privacy_policy.md)
 
 ## Usage
 1. **Configure Templates:**
@@ -50,8 +49,6 @@ A Chrome extension that lets you define multiple URL templates and quickly open 
 |---------|----------|
 | Archive.org | `https://web.archive.org/web/{url}` |
 | Wayback Machine | `https://web.archive.org/save/{url}` |
-| Freedium | `https://freedium.cfd/{url}` |
-| 12ft.io | `https://12ft.io/{url}` |
 | Custom Proxy | `https://your-proxy.com/fetch?url={url}` |
 
 
@@ -95,6 +92,8 @@ quickroute/
 3. Commit changes
 4. Push to branch
 5. Create Pull Request
+
+## [Privacy Policy](privacy_policy.md)
 
 ## License
 This project is open source and available under the [MIT License](LICENSE).
