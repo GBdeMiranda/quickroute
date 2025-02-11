@@ -52,7 +52,6 @@ A Chrome extension that lets you define multiple URL templates and quickly open 
 | Custom Proxy | `https://your-proxy.com/fetch?url={url}` |
 
 
-
 ## Project Structure
 ```plaintext
 quickroute/
@@ -93,7 +92,10 @@ quickroute/
 4. Push to branch
 5. Create Pull Request
 
-## [Privacy Policy](privacy_policy.md)
 
 ## License
 This project is open source and available under the [MIT License](LICENSE).
+
+___ 
+
+[Privacy Policy](privacy_policy.md)
