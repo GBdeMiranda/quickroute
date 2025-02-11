@@ -24,6 +24,7 @@ A Chrome extension that lets you define multiple URL templates and quickly open 
    - Enable "Developer mode" (toggle top-right)
    - Click "Load unpacked"
    - Select the project folder
+3. [Privacy Policy](privacy_policy.md)
 
 ## Usage
 1. **Configure Templates:**
