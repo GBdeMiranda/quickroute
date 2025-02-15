@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const templateList = document.getElementById('templateList');
     const configureButton = document.getElementById('configureButton');
 
-    // Load templates
     chrome.storage.sync.get(['templates'], result => {
         const templates = result.templates || [];
         templateList.innerHTML = templates.map((template, index) => `
@@ -12,6 +11,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="template-preview">${template.url.replace('{url}', '[URL]')}</div>
             </div>
         `).join('');
+
+        const templateItems = document.querySelectorAll('.template-item');
+        templateItems.forEach(item => {
+            item.addEventListener('click', async () => {
+                const index = parseInt(item.dataset.index);
+                const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+                if (tab) {
+                    chrome.runtime.sendMessage({
+                        action: 'processTemplate',
+                        index: index,
+                        url: tab.url
+                    });
+                    window.close();
+                }
+            });
+        });
     });
 
     configureButton.addEventListener('click', () => {

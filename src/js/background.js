@@ -52,7 +52,7 @@ async function updateContextMenu() {
 
 async function handleContextMenuClick(info, tab) {
     try {
-        await loadTemplates(); // Ensure fresh templates
+        await loadTemplates();
         const templateIndex = parseInt(info.menuItemId.split('_')[1]);
         if (isNaN(templateIndex)) {
             console.error('Invalid template index');
@@ -94,6 +94,8 @@ async function handleRuntimeMessages(request, sender, sendResponse) {
         if (request.action === 'updateTemplates') {
             await loadTemplates();
             await updateContextMenu();
+        } else if (request.action === 'processTemplate') {
+            await processTemplate(request.index, request.url);
         }
     } catch (error) {
         console.error('Runtime message error:', error);
