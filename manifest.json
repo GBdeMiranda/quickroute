@@ -52,6 +52,5 @@
     },
     "homepage_url": "https://github.com/GBdeMiranda/quickroute",
     "update_url": "https://github.com/GBdeMiranda/quickroute",
-    "default_locale": "en",
     "short_name": "QuickRoute"
-  }
+}
