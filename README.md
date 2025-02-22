@@ -8,6 +8,8 @@
 
 A Chrome extension that lets you define multiple URL templates and quickly open selected text/links using keyboard shortcuts or a context menu.
 
+➡️ **[Install QuickRoute from the Chrome Web Store](https://chromewebstore.google.com/detail/quickroute/ghcakfbeahdoljdpbifiickdbhjppacg)**  
+
 ## Features
 - Set custom URL templates with `{url}` placeholder
 - Right-click context menu integration
