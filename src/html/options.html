@@ -1,16 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>Template Configuration</title>
+    <meta charset="utf-8">
+    <title>QuickRoute - Template Configuration</title>
     <link rel="stylesheet" href="../styles/options.css">
 </head>
+
 <body>
     <h1>Template Configuration</h1>
+    <p class="intro">
+        A template sends the current page, a link or the selected text to a site:
+        either by opening an address built from it, or by filling a field on the site for you.
+    </p>
     <div id="templatesContainer"></div>
+    <p id="emptyState" class="empty" hidden>No templates yet. Add one below or start from an example.</p>
     <div class="button-container">
-        <button id="addTemplate">Add New Template</button>
-        <button id="saveTemplates">Save All Templates</button>
+        <button id="addTemplate" type="button">Add New Template</button>
+        <select id="presetSelect" aria-label="Add a template from an example">
+            <option value="">Add from example…</option>
+        </select>
+        <button id="saveTemplates" type="button" class="primary">Save All Templates</button>
     </div>
-    <script src="../js/options.js"></script>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <p class="footnote">
+        Keyboard shortcuts run the first four templates. Change them at
+        <a href="#" id="shortcutsLink">chrome://extensions/shortcuts</a>.
+    </p>
+    <script type="module" src="../js/options.js"></script>
 </body>
+
 </html>

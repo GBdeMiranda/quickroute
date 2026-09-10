@@ -1,119 +1,111 @@
-chrome.runtime.onInstalled.addListener(initializeContextMenu);
-chrome.contextMenus.onClicked.addListener(handleContextMenuClick);
-chrome.commands.onCommand.addListener(handleKeyboardShortcut);
-chrome.runtime.onMessage.addListener(handleRuntimeMessages);
+import { displayName, loadTemplates } from './lib/templates.js';
+import { notify } from './lib/notice.js';
+import { captureFocusedField, claimFormJob, completeFormJob, runTemplate, startDraft } from './lib/runner.js';
 
-let templates = [];
+const ROOT_MENU = 'quickroute';
+const CAPTURE_MENU = 'capture-field';
+const SETTINGS_MENU = 'settings';
+const TEMPLATE_MENU_PREFIX = 'template:';
 
-async function initializeContextMenu() {
-  await loadTemplates();
-  chrome.contextMenus.removeAll();
-  chrome.contextMenus.create({
-    id: "main_menu",
-    title: "Open with Template",
-    contexts: ["all"]
+// Listeners are registered synchronously so Chrome can wake the service worker
+// for them. Nothing is cached in memory: Chrome stops the worker after about
+// 30 seconds idle, so every handler reads the templates from storage.
+chrome.runtime.onInstalled.addListener(rebuildMenus);
+chrome.runtime.onStartup.addListener(rebuildMenus);
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'sync' && changes.templates) rebuildMenus();
+});
+chrome.contextMenus.onClicked.addListener((info, tab) => handleMenuClick(info, tab).catch(reportError));
+chrome.commands.onCommand.addListener((command, tab) => handleCommand(command, tab).catch(reportError));
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  handleMessage(message, sender).then(sendResponse, (error) => {
+    reportError(error);
+    sendResponse(null);
   });
-  updateContextMenu();
+  return true;
+});
+
+let menuUpdate = Promise.resolve();
+
+function rebuildMenus() {
+  menuUpdate = menuUpdate.then(buildMenus).catch(reportError);
+  return menuUpdate;
 }
 
-async function loadTemplates() {
-  return new Promise(resolve => {
-    chrome.storage.sync.get(['templates'], result => {
-      if (!result.templates) {
-        templates = [{
-          name: "Configure Templates",
-          url: chrome.runtime.getURL("options.html")
-        }];
-      } else {
-        templates = result.templates;
-      }
+async function buildMenus() {
+  const templates = await loadTemplates();
+  await chrome.contextMenus.removeAll();
+  await createMenu({ id: ROOT_MENU, title: 'Open with template', contexts: ['all'] });
+  for (const template of templates) {
+    await createMenu({ id: TEMPLATE_MENU_PREFIX + template.id, parentId: ROOT_MENU, title: displayName(template), contexts: ['all'] });
+  }
+  if (templates.length) await createMenu({ id: 'separator', parentId: ROOT_MENU, type: 'separator', contexts: ['all'] });
+  await createMenu({ id: CAPTURE_MENU, parentId: ROOT_MENU, title: 'Use this field in a new template...', contexts: ['editable'] });
+  await createMenu({ id: SETTINGS_MENU, parentId: ROOT_MENU, title: 'Configure templates...', contexts: ['all'] });
+}
+
+function createMenu(properties) {
+  return new Promise((resolve) => {
+    chrome.contextMenus.create(properties, () => {
+      if (chrome.runtime.lastError) console.warn('QuickRoute: menu item', properties.id, chrome.runtime.lastError.message);
       resolve();
     });
   });
 }
 
-let createdMenuIds = [];
+async function handleMenuClick(info, tab) {
+  const menuId = String(info.menuItemId);
+  if (menuId === SETTINGS_MENU) return chrome.runtime.openOptionsPage();
+  if (menuId === CAPTURE_MENU) return captureFocusedField(tab, info.frameId);
+  if (!menuId.startsWith(TEMPLATE_MENU_PREFIX)) return;
 
-async function updateContextMenu() {
-  await Promise.all(createdMenuIds.map(id => chrome.contextMenus.remove(id)));
-  createdMenuIds = [];
-
-  templates.forEach((template, index) => {
-    const menuId = `template_${index}`;
-    chrome.contextMenus.create({
-      id: menuId,
-      title: template.name,
-      parentId: "main_menu",
-      contexts: ["all"]
-    });
-    createdMenuIds.push(menuId);
-  });
+  const template = (await loadTemplates()).find(({ id }) => TEMPLATE_MENU_PREFIX + id === menuId);
+  if (!template) return notify('That template no longer exists.');
+  const input = info.selectionText?.trim() || info.linkUrl || info.srcUrl || info.pageUrl || tab?.url;
+  await runTemplate(template, input, tab);
 }
 
-async function handleContextMenuClick(info, tab) {
-    try {
-        await loadTemplates();
-        const templateIndex = parseInt(info.menuItemId.split('_')[1]);
-        if (isNaN(templateIndex)) {
-            console.error('Invalid template index');
-            return;
-        }
-
-        let targetUrl = info.selectionText || info.linkUrl || tab.url;
-        
-        if (info.selectionText && !targetUrl.startsWith('http')) {
-            try {
-                targetUrl = new URL(targetUrl).href;
-            } catch (error) {
-                console.log('Converting selection to URL failed, using raw text');
-                targetUrl = info.selectionText;
-            }
-        }
-
-        await processTemplate(templateIndex, targetUrl);
-    } catch (error) {
-        console.error('Context menu click error:', error);
-    }
+async function handleCommand(command, tab) {
+  const match = /^open_template_(\d+)$/.exec(command);
+  if (!match) return;
+  const position = Number(match[1]);
+  const template = (await loadTemplates())[position - 1];
+  if (!template) return notify(`There is no template number ${position} yet.`);
+  const [activeTab] = tab ? [tab] : await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  if (activeTab) await runTemplate(template, activeTab.url, activeTab);
 }
 
-async function handleKeyboardShortcut(command) {
-    try {
-        await loadTemplates(); // Ensure fresh templates
-        const index = parseInt(command.split('_').pop()) - 1;
-        const tabs = await chrome.tabs.query({active: true, currentWindow: true});
-        if (tabs[0]) {
-            await processTemplate(index, tabs[0].url);
+async function handleMessage(message, sender) {
+  switch (message?.type) {
+    case 'run-template': {
+      if (!sender.url?.startsWith(chrome.runtime.getURL(''))) return null;
+      const template = (await loadTemplates()).find(({ id }) => id === message.templateId);
+      let input = message.input;
+      let sourceTab = message.tab;
+      if (!input || !sourceTab) {
+        const [activeTab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+        if (activeTab) {
+          input = input || activeTab.url;
+          sourceTab = sourceTab || activeTab;
         }
-    } catch (error) {
-        console.error('Keyboard shortcut error:', error);
+      }
+      if (template) await runTemplate(template, input, sourceTab);
+      return { ok: Boolean(template) };
     }
+    case 'field-picked':
+      // Picks for an existing template are handled by the options page.
+      if (message.purpose === 'new') await startDraft(message.field);
+      return null;
+    case 'form-job:ready':
+      return claimFormJob(sender);
+    case 'form-job:filled':
+      return completeFormJob(sender);
+    default:
+      return null;
+  }
 }
 
-async function handleRuntimeMessages(request, sender, sendResponse) {
-    try {
-        if (request.action === 'updateTemplates') {
-            await loadTemplates();
-            await updateContextMenu();
-        } else if (request.action === 'processTemplate') {
-            await processTemplate(request.index, request.url);
-        }
-    } catch (error) {
-        console.error('Runtime message error:', error);
-    }
-}
-
-async function processTemplate(index, inputUrl) {
-    try {
-        if (!templates[index] || !templates[index].url) {
-            console.error('Template not found or invalid');
-            return;
-        }
-        
-        const encodedUrl = encodeURIComponent(inputUrl);
-        const newUrl = templates[index].url.replace(/{url}/g, encodedUrl);
-        
-        await chrome.tabs.create({ url: newUrl });
-    } catch (error) {
-        console.error('Process template error:', error);
-    }
+function reportError(error) {
+  console.error('QuickRoute:', error);
+  notify(`Something went wrong: ${error?.message ?? error}`).catch(() => {});
 }

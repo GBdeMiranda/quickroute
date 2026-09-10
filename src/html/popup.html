@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="utf-8">
+    <title>QuickRoute</title>
     <link rel="stylesheet" href="../styles/popup.css">
 </head>
 <body>
+    <div id="notice" class="notice" role="alert" hidden>
+        <span id="noticeText"></span>
+        <button id="dismissNotice" type="button" aria-label="Dismiss">X</button>
+    </div>
     <div id="templateList"></div>
-    <button id="configureButton">Configure Templates</button>
-    <script src="../js/popup.js"></script>
+    <p id="emptyState" class="empty" hidden>No templates yet. Configure one to get started.</p>
+    <p id="status" class="status" role="status" hidden></p>
+    <button id="pickButton" type="button">Create template from a field on this page</button>
+    <button id="configureButton" type="button">Configure Templates</button>
+    <script type="module" src="../js/popup.js"></script>
 </body>
 </html>

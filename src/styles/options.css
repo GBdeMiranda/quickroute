@@ -1,4 +1,4 @@
-body { 
+body {
     padding: 40px;
     font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
     max-width: 800px;
@@ -7,15 +7,25 @@ body {
     color: #1a1a1a;
 }
 
+[hidden] {
+    display: none !important;
+}
+
 h1 {
     font-weight: 600;
-    margin-bottom: 30px;
+    margin-bottom: 12px;
     background: linear-gradient(to right, #6A0DAD, #D1007B);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.template { 
+.intro {
+    margin: 0 0 24px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.template {
     background: white;
     border-left: 4px solid;
     border-image-slice: 1;
@@ -24,25 +34,46 @@ h1 {
     padding: 20px;
     margin: 15px 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease;
 }
 
-.template:hover {
-    transform: translateY(-2px);
+.template-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
 }
 
-input { 
+.spacer {
+    flex: 1;
+}
+
+input[type="text"],
+textarea,
+select {
     display: block;
     width: 100%;
+    box-sizing: border-box;
     margin: 8px 0;
     padding: 12px;
     border: 1px solid #e0e0e0;
     border-radius: 6px;
+    background: white;
+    color: inherit;
+    font: inherit;
     font-size: 14px;
     transition: border-color 0.2s ease;
 }
 
-input:focus {
+textarea {
+    resize: vertical;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
     outline: none;
     border-color: #666;
 }
@@ -54,6 +85,7 @@ button {
     border-radius: 6px;
     background: linear-gradient(to bottom, #6A0DAD, #D1007B);
     color: white;
+    font: inherit;
     font-weight: 500;
     cursor: pointer;
     transition: background 0.2s ease;
@@ -63,6 +95,28 @@ button:hover {
     background: linear-gradient(to bottom, #D1007B, #6A0DAD);
 }
 
+button:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+button.small {
+    margin: 0;
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+button.secondary,
+button.secondary:hover {
+    background: white;
+    color: #6A0DAD;
+    border: 1px solid #d9c3ea;
+}
+
+button.secondary:hover {
+    background: #f6effb;
+}
+
 .shortcut-badge {
     display: inline-block;
     padding: 4px 8px;
@@ -70,12 +124,117 @@ button:hover {
     color: white;
     border-radius: 4px;
     font-size: 12px;
-    margin-bottom: 10px;
+}
+
+.type-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 12px 0 4px;
+    font-size: 14px;
+}
+
+.radio,
+.checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.checkbox {
+    margin: 0 0 8px;
+    font-size: 14px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.row input[type="text"] {
+    flex: 1;
+}
+
+.row button {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.hint {
+    margin: 0 0 10px;
+    color: #666;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.access {
+    margin: 4px 0 0;
+    color: #1b7f3b;
+    font-size: 12px;
+}
+
+.access.warn {
+    color: #9a5b00;
+}
+
+.problems {
+    margin: 10px 0 0;
+    padding-left: 18px;
+    color: #b00020;
+    font-size: 13px;
+}
+
+.empty {
+    color: #666;
 }
 
 .button-container {
+    position: sticky;
+    bottom: 0;
     margin-top: 20px;
+    padding: 8px 0;
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 10px;
     justify-content: flex-start;
+    background: #fafafa;
+}
+
+.button-container select {
+    width: auto;
+    margin: 8px;
+}
+
+.button-container .primary {
+    margin-left: auto;
+}
+
+.status {
+    min-height: 1.4em;
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.status.ok {
+    color: #1b7f3b;
+}
+
+.status.warn {
+    color: #9a5b00;
+}
+
+.status.error {
+    color: #b00020;
+}
+
+.footnote {
+    color: #777;
+    font-size: 12px;
+}
+
+.footnote a {
+    color: #6A0DAD;
 }

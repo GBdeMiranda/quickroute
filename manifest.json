@@ -1,15 +1,19 @@
 {
     "name": "QuickRoute",
-    "description": "Chrome extension for URL template shortcuts",
-    "version": "1.0",
+    "description": "Send the current page, a link or selected text to any site, by URL template or by filling the site's form.",
+    "version": "1.1.0",
     "manifest_version": 3,
+    "minimum_chrome_version": "102",
     "action": {
       "default_popup": "src/html/popup.html",
-      "default_icon": "icons/icon48.png"
+      "default_icon": "icons/icon48.png",
+      "default_title": "QuickRoute"
     },
-    "permissions": ["storage", "contextMenus", "activeTab"],
+    "permissions": ["storage", "contextMenus", "activeTab", "scripting"],
+    "optional_host_permissions": ["*://*/*"],
     "background": {
-      "service_worker": "src/js/background.js"
+      "service_worker": "src/js/background.js",
+      "type": "module"
     },
     "options_page": "src/html/options.html",
     "content_security_policy": {
